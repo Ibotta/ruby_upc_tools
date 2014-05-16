@@ -135,6 +135,10 @@ describe UpcTools do
       it { expect(UpcTools.convert_upce_to_upca('01234570')).to eq('012345000070') }
       it { expect(UpcTools.convert_upce_to_upca('01234580')).to eq('012345000080') }
       it { expect(UpcTools.convert_upce_to_upca('01234590')).to eq('012345000090') }
+
+      describe "Exceptions" do
+        pending
+      end
     end
     describe "#convert_upca_to_upce" do
       it { expect(UpcTools.convert_upca_to_upce('042100005264')).to eq('04252614') }
@@ -149,6 +153,10 @@ describe UpcTools do
       it { expect(UpcTools.convert_upca_to_upce('043000000854')).to eq('04308504') }
       it { expect(UpcTools.convert_upca_to_upce('127200002013')).to eq('12720123') }
       it { expect { UpcTools.convert_upca_to_upce('212345678992') }.to raise_error(ArgumentError) }
+
+      describe "Exceptions" do
+        pending
+      end
     end
   end
 

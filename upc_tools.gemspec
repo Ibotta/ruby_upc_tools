@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["jhart@onyxraven.com"]
   spec.summary       = %q{UPC validation and creation utilities}
   spec.description   = %q{create, validate, convert UPCs}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/Ibotta/ruby_upc_tools"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")

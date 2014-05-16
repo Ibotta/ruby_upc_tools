@@ -230,12 +230,13 @@ module UpcTools
     #todo should i zero pad upc_a?
     #todo allow without check digit?
     upc_a = upc_a.to_s
-    start = upc_a[0] #A
+    raise ArgumentError, "Must be 12 characters long" unless upc_a.size == 12
+    start = upc_a[0] #first char
     raise ArgumentError, "Must be type 0 or 1" unless ["0", "1"].include? start
 
-    chk = upc_a[-1]
-    mfr = upc_a[1...6]
-    prod = upc_a[6...11]
+    chk = upc_a[-1] #last char
+    mfr = upc_a[1...6] #next 5 characters
+    prod = upc_a[6...11] #last 4 characters w/o chk
 
     upc_e = if ["000", "100", "200"].include? mfr[-3,3]
       "#{mfr[0,2]}#{prod[-3,3]}#{mfr[2]}"
