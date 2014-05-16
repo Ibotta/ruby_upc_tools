@@ -1,5 +1,6 @@
 require "upc_tools/version"
 
+#UPC Tools
 module UpcTools
 
   #Generate one UPC check digit
@@ -41,10 +42,16 @@ module UpcTools
 
   #Type 2 format 2 | ID3456 | X | 000P | C (Check X is optional, price can overflow in some cases)
   # @see http://www.gs1tw.org/twct/web/BarCode/GS1_Section3V6-0.pdf section 3.A.1.2
+
+  # @see http://www.gs1tw.org/twct/web/BarCode/GS1_Section3V6-0.pdf Figure 3.A.1.2 – 1 Weight Factor 2-
   WEIGHT_FACTOR_2 = [0,2,4,6,8,9,1,3,5,7]
+  # @see http://www.gs1tw.org/twct/web/BarCode/GS1_Section3V6-0.pdf Figure 3.A.1.2 – 2 Weight Factor 3
   WEIGHT_FACTOR_3 = [0,3,6,9,2,5,8,1,4,7]
+  # @see http://www.gs1tw.org/twct/web/BarCode/GS1_Section3V6-0.pdf Figure 3.A.1.2 – 2 Weight Factor 5+
   WEIGHT_FACTOR_5plus = [0,5,1,6,2,7,3,8,4,9]
+  # @see http://www.gs1tw.org/twct/web/BarCode/GS1_Section3V6-0.pdf Figure 3.A.1.2 – 4 Weight Factor 5-
   WEIGHT_FACTOR_5mins = [0,5,9,4,8,3,7,2,6,1]
+  # @see http://www.gs1tw.org/twct/web/BarCode/GS1_Section3V6-0.pdf Figure 3.A.1.2 – 4 inverse Weight Factor 5-
   WEIGHT_FACTOR_5mins_opposite = [0,9,7,5,3,1,8,6,4,2]
 
   #Trim UPC to proper length for type2 checking
@@ -217,7 +224,7 @@ module UpcTools
   # @see http://www.taltech.com/barcodesoftware/symbologies/upc
   # @see http://en.wikipedia.org/wiki/Universal_Product_Code#UPC-E
   # @see http://www.barcodeisland.com/upce.phtml#Conversion
-  # @param upc_e [String|Integer] 12 digit UPC-A to convert
+  # @param upc_a [String|Integer] 12 digit UPC-A to convert
   # @return [String] 8 digit UPC-E
   def self.convert_upca_to_upce(upc_a)
     #todo should i zero pad upc_a?
