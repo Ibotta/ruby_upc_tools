@@ -16,7 +16,7 @@ module UpcTools
       even += item if index.odd? #opposite because of 0 indexing
       odd += item if index.even?
     end
-    chk_total = odd * 3 + even
+    chk_total = (odd * 3) + even
     (10 - (chk_total % 10)) % 10
   end
 
@@ -133,7 +133,7 @@ module UpcTools
     upc = upc.to_s
     plu = upc[1,5]
     chk = upc[-1]
-    if upc.size == 13 or skip_price_check
+    if upc.size == 13 || skip_price_check
       price = upc[-6, 5]
       price_chk = upc[-7] unless skip_price_check
     else
@@ -232,19 +232,19 @@ module UpcTools
     upc_a = upc_a.to_s
     raise ArgumentError, "Must be 12 characters long" unless upc_a.size == 12
     start = upc_a[0] #first char
-    raise ArgumentError, "Must be type 0 or 1" unless ["0", "1"].include? start
+    raise ArgumentError, "Must be type 0 or 1" unless ["0", "1"].include?(start)
 
     chk = upc_a[-1] #last char
     mfr = upc_a[1...6] #next 5 characters
     prod = upc_a[6...11] #last 4 characters w/o chk
 
-    upc_e = if ["000", "100", "200"].include? mfr[-3,3]
+    upc_e = if ["000", "100", "200"].include?(mfr[-3,3])
       "#{mfr[0,2]}#{prod[-3,3]}#{mfr[2]}"
-    elsif mfr[-2,2] == '00' and prod.to_i <= 99
+    elsif mfr[-2,2] == '00' && prod.to_i <= 99
       "#{mfr[0,3]}#{prod[-2,2]}3"
-    elsif mfr[-1] == '0' and prod.to_i <= 9
+    elsif mfr[-1] == '0' && prod.to_i <= 9
       "#{mfr[0,4]}#{prod[-1]}4"
-    elsif mfr[-1] != '0' and [5,6,7,8,9].include? prod.to_i
+    elsif mfr[-1] != '0' && [5,6,7,8,9].include?(prod.to_i)
       "#{mfr}#{prod[-1]}"
     end
     raise ArgumentError, "Must meet formatting requirements" unless upc_e
