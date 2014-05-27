@@ -59,7 +59,8 @@ module UpcTools
   # @return [String] trimmed string
   def self.trim_type2_upc(upc)
     #if length is > 12, strip leading 0
-    upc = upc.to_s.gsub(/^0+/, '') if upc.size > 12
+    upc = upc.to_s
+    upc.gsub!(/^0+/, '') if upc.size > 12
     upc
   end
 
@@ -76,6 +77,7 @@ module UpcTools
   # @param upc [Integer|String] Type 2 UPC to check with check digit(s)
   # @return [Boolean] matching check digit(s)?
   def self.valid_type2_upc_check_digit?(upc)
+    upc = trim_type2_upc(upc)
     return false unless type2_upc?(upc)
     plu, price, chk, price_chk = split_type2_upc(upc)
     price_chk_calc = if price.size == 4
@@ -130,7 +132,7 @@ module UpcTools
   # @param skip_price_check [Boolean] Ignore price check digit (include digit in price field)
   # @return [Array(String,String,String,String)] elements of array: ItemID/PLU (not including leading 2), Price, UPC Check Digit, Price Check Digit
   def self.split_type2_upc(upc, skip_price_check=false)
-    upc = upc.to_s
+    upc = trim_type2_upc(upc)
     plu = upc[1,5]
     chk = upc[-1]
     if upc.size == 13 || skip_price_check

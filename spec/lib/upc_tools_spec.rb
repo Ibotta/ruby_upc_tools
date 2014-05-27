@@ -94,6 +94,9 @@ describe UpcTools do
 
       it { expect(UpcTools.item_price_to_type2('00349', '10485', upc_length: 12)).to eq('200349104852') }
 
+      it { expect(UpcTools.item_price_to_type2('00349', '0000')).to eq('200349000000') }
+      it { expect(UpcTools.item_price_to_type2('20812', '0000')).to eq('220812000009') }
+
       describe "Exceptions" do
         pending
       end
