@@ -55,20 +55,20 @@ module UpcTools
   WEIGHT_FACTOR_5mins_opposite = [0,9,7,5,3,1,8,6,4,2]
 
   #Trim UPC to proper length for type2 checking
-  # @param upc [Integer|String] UPC
+  # @param num [Integer|String] UPC
   # @return [String] trimmed string
-  def self.trim_type2_upc(upc)
+  def self.trim_type2_upc(num)
     #if length is > 12, strip leading 0
-    upc = upc.to_s
+    upc = num.to_s
     upc.gsub!(/^0+/, '') if upc.size > 12
     upc
   end
 
   #Is this a type2 UPC?
-  # @param upc [Integer|String] upc to check
+  # @param num [Integer|String] upc to check
   # @return [Boolean] is UPC a type-2?
-  def self.type2_upc?(upc)
-    upc = trim_type2_upc(upc)
+  def self.type2_upc?(num)
+    upc = trim_type2_upc(num)
     return false if upc.size > 13 || upc.size < 12 #length is wrong
     upc.start_with?('2')
   end
@@ -76,8 +76,8 @@ module UpcTools
   #Validate UPC and Price check digit for a type 2 upc. Does NOT also check the UPC itself
   # @param upc [Integer|String] Type 2 UPC to check with check digit(s)
   # @return [Boolean] matching check digit(s)?
-  def self.valid_type2_upc_check_digit?(upc)
-    upc = trim_type2_upc(upc)
+  def self.valid_type2_upc_check_digit?(num)
+    upc = trim_type2_upc(num)
     return false unless type2_upc?(upc)
     plu, price, chk, price_chk = split_type2_upc(upc)
     price_chk_calc = if price.size == 4
@@ -107,21 +107,21 @@ module UpcTools
       raise ArgumentError, "opts[:price_length] must be 4 or 5" if price_length != 4 && price_length != 5
     end
 
-    plu = plu.to_s
-    raise ArgumentError, "plu must be 5 digits long" if plu.size != 5
+    item = plu.to_s
+    raise ArgumentError, "plu must be 5 digits long" if item.size != 5
 
-    price = price.to_s.rjust(price_length, '0')
-    raise ArgumentError, "price must be less than or equal to 5 digits long" if price.size > 5
+    pr = price.to_s.rjust(price_length, '0')
+    raise ArgumentError, "price must be less than or equal to 5 digits long" if pr.size > 5
 
-    price_chk_calc = if price.size == 4
-      generate_type2_upc_price_check_digit_4(price)
-    elsif price.size == 5 && upc_length == 13
-      generate_type2_upc_price_check_digit_5(price)
+    price_chk_calc = if pr.size == 4
+      generate_type2_upc_price_check_digit_4(pr)
+    elsif pr.size == 5 && upc_length == 13
+      generate_type2_upc_price_check_digit_5(pr)
     else
       ''
     end
 
-    upc = "2#{plu}#{price_chk_calc}#{price}"
+    upc = "2#{item}#{price_chk_calc}#{pr}"
     upc << generate_upc_check_digit(upc).to_s
   end
 
@@ -131,8 +131,8 @@ module UpcTools
   # @param upc [String|Integer] UPC to split up
   # @param skip_price_check [Boolean] Ignore price check digit (include digit in price field)
   # @return [Array(String,String,String,String)] elements of array: ItemID/PLU (not including leading 2), Price, UPC Check Digit, Price Check Digit
-  def self.split_type2_upc(upc, skip_price_check=false)
-    upc = trim_type2_upc(upc)
+  def self.split_type2_upc(num, skip_price_check=false)
+    upc = trim_type2_upc(num)
     plu = upc[1,5]
     chk = upc[-1]
     if upc.size == 13 || skip_price_check
@@ -200,10 +200,10 @@ module UpcTools
   # @see http://en.wikipedia.org/wiki/Universal_Product_Code#UPC-E
   # @param upc_e [String|Integer] 8 digit UPC-E to convert
   # @return [String] 12 digit UPC-A
-  def self.convert_upce_to_upca(upc_e)
+  def self.convert_upce_to_upca(upc)
     #todo should i zero pad upc_e?
     #todo allow without check digit?
-    upc_e = upc_e.to_s
+    upc_e = upc.to_s
     raise ArgumentError, "UPC-E must be 8 digits" unless upc_e.size == 8
 
     map_id = upc_e[-2].to_i #G
@@ -228,10 +228,10 @@ module UpcTools
   # @see http://www.barcodeisland.com/upce.phtml#Conversion
   # @param upc_a [String|Integer] 12 digit UPC-A to convert
   # @return [String] 8 digit UPC-E
-  def self.convert_upca_to_upce(upc_a)
+  def self.convert_upca_to_upce(upc)
     #todo should i zero pad upc_a?
     #todo allow without check digit?
-    upc_a = upc_a.to_s
+    upc_a = upc.to_s
     raise ArgumentError, "Must be 12 characters long" unless upc_a.size == 12
     start = upc_a[0] #first char
     raise ArgumentError, "Must be type 0 or 1" unless ["0", "1"].include?(start)
