@@ -145,6 +145,15 @@ module UpcTools
     [plu, price, chk, price_chk]
   end
 
+  #Get the float price from a Type2 UPC
+  # @param upc [String|Integer] UPC to get price from
+  # @param skip_price_check [Boolean] Ignore price check digit (include digit in price field)
+  # @return [Float] calculated price (rounded to nearest cent)
+  def self.get_price_from_type2_upc(upc, skip_price_check=false)
+    _, price = UpcTools.split_type2_upc(upc, skip_price_check)
+    (price.to_f / 100.0).round(2)
+  end
+
   #Generate price check digit for type 2 upc price of 4 digits
   # @see http://www.gs1tw.org/twct/web/BarCode/GS1_Section3V6-0.pdf section 3.A.1.3
   # @see http://barcodes.gs1us.org/GS1%20US%20BarCodes%20and%20eCom%20-%20The%20Global%20Language%20of%20Business.htm
