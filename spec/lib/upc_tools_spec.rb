@@ -112,6 +112,11 @@ describe UpcTools do
       it { expect(UpcTools.split_type2_upc('2003493104857', false)).to eq(['00349', '10485', '7', '3']) }
       it { expect(UpcTools.split_type2_upc('2057720112568')).to eq(['05772', '11256', '8', '0']) }
     end
+    describe "#type2_number_price" do
+      it { expect(UpcTools.type2_number_price('203374803000')).to eq(['00203374000007', 3.0]) }
+      it { expect(UpcTools.type2_number_price('220812713657')).to eq(['00220812000009', 13.65]) }
+      it { expect(UpcTools.type2_number_price('2003493104857')).to eq(['00200349000000', 104.85]) }
+    end
     describe "#generate_type2_upc_price_check_digit_4" do
       it { expect(UpcTools.generate_type2_upc_price_check_digit_4(2875)).to eq(9) }
       it { expect(UpcTools.generate_type2_upc_price_check_digit_4('0300')).to eq(8) }
