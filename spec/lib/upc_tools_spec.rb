@@ -116,6 +116,7 @@ describe UpcTools do
       it { expect(UpcTools.type2_number_price('203374803000')).to eq(['00203374000007', 3.0]) }
       it { expect(UpcTools.type2_number_price('220812713657')).to eq(['00220812000009', 13.65]) }
       it { expect(UpcTools.type2_number_price('2003493104857')).to eq(['00200349000000', 104.85]) }
+      it { expect(UpcTools.type2_number_price('03201234567890')).to eq(['03201234567890', nil]) }
     end
     describe "#generate_type2_upc_price_check_digit_4" do
       it { expect(UpcTools.generate_type2_upc_price_check_digit_4(2875)).to eq(9) }
