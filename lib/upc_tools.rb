@@ -264,16 +264,15 @@ module UpcTools
   end
 
 
-  # Split a type2 UPC into the UPC itself and the price contained therein.
+  # Split a type2 UPC into the UPC itself and the price contained therein. If the value passed in is a type2 UPC, the return value will
   # @param number [Integer|String] upc to check
-  # @return [Array(String,Float)] elements of array: type2 UPC string, Price
+  # @return [Array(String,Float)] elements of array: type2 UPC string, Price. The UPC ends up with a 0 price if it is type2. The Price will be nil if the number passed in is not type2.
   def self.type2_number_price(number)
     if type2_upc?(number) && valid_type2_upc_check_digit?(number)
       #looks like a type-2 and the price chk is valid
       item_code, price = split_type2_upc(number)
       price = (price.to_f / 100.0).round(2)
 
-      #try to find the right UPC from db by rewriting with 0 price
       upc = item_price_to_type2(item_code, 0).rjust(14, '0')
       [upc, price]
     else
