@@ -19,27 +19,27 @@ describe UpcTools do
       it { expect(UpcTools.generate_upc_check_digit('37610425002123456')).to eq(9) }
     end
     describe "#valid_upc_check_digit" do
-      it { expect(UpcTools.valid_upc_check_digit?(58741398456020)).to be_true }
-      it { expect(UpcTools.valid_upc_check_digit?('00000045678981')).to be_true }
-      it { expect(UpcTools.valid_upc_check_digit?('45678981')).to be_true }
-      it { expect(UpcTools.valid_upc_check_digit?(58741398456029)).to be_false }
-      it { expect(UpcTools.valid_upc_check_digit?('0000004567898')).to be_false }
-      it { expect(UpcTools.valid_upc_check_digit?(4567898)).to be_false }
+      it { expect(UpcTools.valid_upc_check_digit?(58741398456020)).to eq(true) }
+      it { expect(UpcTools.valid_upc_check_digit?('00000045678981')).to eq(true) }
+      it { expect(UpcTools.valid_upc_check_digit?('45678981')).to eq(true) }
+      it { expect(UpcTools.valid_upc_check_digit?(58741398456029)).to eq(false) }
+      it { expect(UpcTools.valid_upc_check_digit?('0000004567898')).to eq(false) }
+      it { expect(UpcTools.valid_upc_check_digit?(4567898)).to eq(false) }
 
-      it { expect(UpcTools.valid_upc_check_digit?(8765432145874)).to be_true }
-      it { expect(UpcTools.valid_upc_check_digit?('0000004567899')).to be_true }
-      it { expect(UpcTools.valid_upc_check_digit?(4567899)).to be_true }
-      it { expect(UpcTools.valid_upc_check_digit?(876543214587)).to be_false }
-      it { expect(UpcTools.valid_upc_check_digit?('0000004567898')).to be_false }
-      it { expect(UpcTools.valid_upc_check_digit?('4567898')).to be_false }
+      it { expect(UpcTools.valid_upc_check_digit?(8765432145874)).to eq(true) }
+      it { expect(UpcTools.valid_upc_check_digit?('0000004567899')).to eq(true) }
+      it { expect(UpcTools.valid_upc_check_digit?(4567899)).to eq(true) }
+      it { expect(UpcTools.valid_upc_check_digit?(876543214587)).to eq(false) }
+      it { expect(UpcTools.valid_upc_check_digit?('0000004567898')).to eq(false) }
+      it { expect(UpcTools.valid_upc_check_digit?('4567898')).to eq(false) }
 
-      it { expect(UpcTools.valid_upc_check_digit?(123456789012)).to be_true }
-      it { expect(UpcTools.valid_upc_check_digit?('987654321098')).to be_true }
-      it { expect(UpcTools.valid_upc_check_digit?(323456789012)).to be_false }
-      it { expect(UpcTools.valid_upc_check_digit?('7654321098')).to be_false }
+      it { expect(UpcTools.valid_upc_check_digit?(123456789012)).to eq(true) }
+      it { expect(UpcTools.valid_upc_check_digit?('987654321098')).to eq(true) }
+      it { expect(UpcTools.valid_upc_check_digit?(323456789012)).to eq(false) }
+      it { expect(UpcTools.valid_upc_check_digit?('7654321098')).to eq(false) }
 
-      it { expect(UpcTools.valid_upc_check_digit?('376104250021234569')).to be_true }
-      it { expect(UpcTools.valid_upc_check_digit?('376104250021234561')).to be_false }
+      it { expect(UpcTools.valid_upc_check_digit?('376104250021234569')).to eq(true) }
+      it { expect(UpcTools.valid_upc_check_digit?('376104250021234561')).to eq(false) }
     end
     describe "#extend_upc_with_check_digit" do
       it { expect(UpcTools.extend_upc_with_check_digit(12345678901)).to eq('123456789012') }
@@ -69,16 +69,16 @@ describe UpcTools do
       it { expect(UpcTools.trim_type2_upc('001234567890')).to eq('001234567890') }
     end
     describe "#type2_upc" do
-      it { expect(UpcTools.type2_upc?('00201234567890')).to be_true }
-      it { expect(UpcTools.type2_upc?('03201234567890')).to be_false}
-      it { expect(UpcTools.type2_upc?('001234567890')).to be_false }
-      it { expect(UpcTools.type2_upc?('2100123456789')).to be_true }
-      it { expect(UpcTools.type2_upc?('02100123456789')).to be_true }
+      it { expect(UpcTools.type2_upc?('00201234567890')).to eq(true) }
+      it { expect(UpcTools.type2_upc?('03201234567890')).to eq(false)}
+      it { expect(UpcTools.type2_upc?('001234567890')).to eq(false) }
+      it { expect(UpcTools.type2_upc?('2100123456789')).to eq(true) }
+      it { expect(UpcTools.type2_upc?('02100123456789')).to eq(true) }
     end
     describe "#valid_type2_upc_check_digit" do
-      it { expect(UpcTools.valid_type2_upc_check_digit?('203374803000')).to be_true }
-      it { expect(UpcTools.valid_type2_upc_check_digit?('220812713657')).to be_true }
-      it { expect(UpcTools.valid_type2_upc_check_digit?('2003493104857')).to be_true }
+      it { expect(UpcTools.valid_type2_upc_check_digit?('203374803000')).to eq(true) }
+      it { expect(UpcTools.valid_type2_upc_check_digit?('220812713657')).to eq(true) }
+      it { expect(UpcTools.valid_type2_upc_check_digit?('2003493104857')).to eq(true) }
 
       describe "Exceptions" do
         pending
