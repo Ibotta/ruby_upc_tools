@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    upc_tools (0.0.2)
+    upc_tools (0.1)
 
 GEM
   remote: https://rubygems.org/
