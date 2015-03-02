@@ -37,3 +37,6 @@ Icon
 
 #sublime text
 *.sublime-workspace
+
+#RubyMine
+.idea
