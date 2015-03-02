@@ -279,4 +279,5 @@ module UpcTools
       [number, nil]
     end
   end
+
 end
