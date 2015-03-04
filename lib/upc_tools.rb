@@ -90,6 +90,13 @@ module UpcTools
     price_chk == price_chk_calc.to_s
   end
 
+  #Convenience method validates that upc is type2 with valid check digit
+  # @param upc [Integer|String] Type 2 UPC to check
+  # @return [Boolean] is UPC a type-2 with valid check digit(s)?
+  def self.valid_type2_upc?(upc)
+    type2_upc?(upc) && valid_type2_upc_check_digit?(upc)
+  end
+
   #Convert item ID (PLU) and price to type2 UPC string
   # @param plu [Integer|String] item identifier (not including leading 2)
   # @param price [Integer|String] price as integer (in cents). Will be 0 padded if necessary
