@@ -1,5 +1,7 @@
 # UpcTools
 
+[![Build Status](https://travis-ci.org/Ibotta/ruby_upc_tools.svg?branch=master)](https://travis-ci.org/Ibotta/ruby_upc_tools)
+
 Utilities to generate, convert and validate UPCs.
 
 Includes handling of type-2 (random weight) UPCs, and conversion between UPC-A and UPC-E formats.
