@@ -128,6 +128,10 @@ describe UpcTools do
       it { expect(UpcTools.generate_type2_upc_price_check_digit_5(14685)).to eq(6) }
       it { expect(UpcTools.generate_type2_upc_price_check_digit_5('10485')).to eq(3) }
     end
+    describe "#valid_type2_upc?" do
+      it { expect(UpcTools.valid_type2_upc?('00220812000009')).to eq(true) }
+      it { expect(UpcTools.valid_type2_upc?('00987456789010')).to eq(false) }
+    end
   end
 
   describe "UPC E" do
