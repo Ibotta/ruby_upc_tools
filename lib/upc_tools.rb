@@ -6,7 +6,7 @@ module UpcTools
   #Generate one UPC check digit
   # @see http://www.gs1.org/barcodes/support/check_digit_calculator/
   # @see http://www.gs1tw.org/twct/web/BarCode/GS1_Section3V6-0.pdf section 3.A.1.1
-  # @param num [Integer|String] base number to generate check digit for
+  # @param num [String] base number to generate check digit for
   # @return [Integer] check digit (always between 0-9)
   def self.generate_upc_check_digit(num)
     even = odd = 0
@@ -23,7 +23,7 @@ module UpcTools
   #Validate UPC check digit
   # @see http://www.gs1.org/barcodes/support/check_digit_calculator/
   # @see http://www.gs1tw.org/twct/web/BarCode/GS1_Section3V6-0.pdf section 3.A.1.1
-  # @param upc [Integer|String] UPC with check digit to check
+  # @param upc [String] UPC with check digit to check
   # @return [Boolean] truth of valid check digit
   def self.valid_upc_check_digit?(upc)
     full_upc = upc.to_s.rjust(14, '0') #extend to full 14 digits first
@@ -32,7 +32,7 @@ module UpcTools
   end
 
   #Add check digit and properly pad
-  # @param num [Integer|String] base number to extend
+  # @param num [String] base number to extend
   # @param extended_length [Integer] resulting target to pad number to
   # @return [String] resulting UPC with check digit
   def self.extend_upc_with_check_digit(num, extended_length=12)
@@ -55,7 +55,7 @@ module UpcTools
   WEIGHT_FACTOR_5mins_opposite = [0,9,7,5,3,1,8,6,4,2]
 
   #Trim UPC to proper length for type2 checking
-  # @param upc [Integer|String] UPC
+  # @param upc [String] UPC
   # @return [String] trimmed string
   def self.trim_type2_upc(upc)
     #if length is > 12, strip leading 0
@@ -65,7 +65,7 @@ module UpcTools
   end
 
   #Is this a type2 UPC?
-  # @param upc [Integer|String] upc to check
+  # @param upc [String] upc to check
   # @return [Boolean] is UPC a type-2?
   def self.type2_upc?(upc)
     upc = trim_type2_upc(upc)
@@ -74,7 +74,7 @@ module UpcTools
   end
 
   #Validate UPC and Price check digit for a type 2 upc. Does NOT also check the UPC itself
-  # @param upc [Integer|String] Type 2 UPC to check with check digit(s)
+  # @param upc [String] Type 2 UPC to check with check digit(s)
   # @return [Boolean] matching check digit(s)?
   def self.valid_type2_upc_check_digit?(upc)
     upc = trim_type2_upc(upc)
@@ -91,8 +91,8 @@ module UpcTools
   end
 
   #Convert item ID (PLU) and price to type2 UPC string
-  # @param plu [Integer|String] item identifier (not including leading 2)
-  # @param price [Integer|String] price as integer (in cents). Will be 0 padded if necessary
+  # @param plu [String] item identifier (not including leading 2)
+  # @param price [String] price as integer (in cents). Will be 0 padded if necessary
   # @param opts [Hash] options hash
   # @option opts [Integer] :price_length (4) price length (4 or 5). Will override given price length.
   # @option opts [Integer] :upc_length (12) price length (12 or 13)
@@ -128,9 +128,9 @@ module UpcTools
   #Split a Type2 UPC into its component parts
   # @see http://www.meattrack.com/Background/UPC.php
   # @see http://www.iddba.org/upccharacter2.aspx
-  # @param upc [String|Integer] UPC to split up
+  # @param upc [String] UPC to split up
   # @param skip_price_check [Boolean] Ignore price check digit (include digit in price field)
-  # @return [Array(String,String,String,String)] elements of array: ItemID/PLU (not including leading 2), Price, UPC Check Digit, Price Check Digit
+  # @return [Array<String>] elements of array: ItemID/PLU (not including leading 2), Price, UPC Check Digit, Price Check Digit
   def self.split_type2_upc(upc, skip_price_check=false)
     upc = trim_type2_upc(upc)
     plu = upc[1,5]
@@ -146,7 +146,7 @@ module UpcTools
   end
 
   #Get the float price from a Type2 UPC
-  # @param upc [String|Integer] UPC to get price from
+  # @param upc [String] UPC to get price from
   # @param skip_price_check [Boolean] Ignore price check digit (include digit in price field)
   # @return [Float] calculated price (rounded to nearest cent)
   def self.get_price_from_type2_upc(upc, skip_price_check=false)
@@ -154,10 +154,26 @@ module UpcTools
     (price.to_f / 100.0).round(2)
   end
 
+  # Split a type2 UPC into the UPC itself and the price contained therein.
+  # @param number [String] upc to check
+  # @return [Array<String,Float>] elements of array: type2 UPC string, Price. The UPC ends up with a 0 price if it is type2. The Price will be nil if the number passed in is not type2.
+  def self.type2_number_price(number)
+    if type2_upc?(number) && valid_type2_upc_check_digit?(number)
+      #looks like a type-2 and the price chk is valid
+      item_code, price = split_type2_upc(number)
+      price = (price.to_f / 100.0).round(2)
+
+      upc = item_price_to_type2(item_code, 0).rjust(14, '0')
+      [upc, price]
+    else
+      [number, nil]
+    end
+  end
+
   #Generate price check digit for type 2 upc price of 4 digits
   # @see http://www.gs1tw.org/twct/web/BarCode/GS1_Section3V6-0.pdf section 3.A.1.3
   # @see http://barcodes.gs1us.org/GS1%20US%20BarCodes%20and%20eCom%20-%20The%20Global%20Language%20of%20Business.htm
-  # @param price [Integer|String] price as integer (in cents)
+  # @param price [String] price as integer (in cents)
   # @return [Integer] calculated price check digit
   def self.generate_type2_upc_price_check_digit_4(price)
     #digit weighting factors 2-, 2-, 3, 5-
@@ -172,7 +188,7 @@ module UpcTools
 
   #Generate price check digit for type 2 upc price of 5 digits
   # @see http://www.gs1tw.org/twct/web/BarCode/GS1_Section3V6-0.pdf section 3.A.1.4
-  # @param price [Integer|String] price as integer (in cents)
+  # @param price [String] price as integer (in cents)
   # @return [Integer] calculated price check digit
   def self.generate_type2_upc_price_check_digit_5(price)
     #digit weighting factors 5+, 2-, 5-, 5+, 2- => opposite of 5-
@@ -207,7 +223,7 @@ module UpcTools
   #Convert short (8 digit) UPC-E to 12 digit UPC-A
   # @see http://www.taltech.com/barcodesoftware/symbologies/upc
   # @see http://en.wikipedia.org/wiki/Universal_Product_Code#UPC-E
-  # @param upc_e [String|Integer] 8 digit UPC-E to convert
+  # @param upc_e [String] 8 digit UPC-E to convert
   # @return [String] 12 digit UPC-A
   def self.convert_upce_to_upca(upc_e)
     #todo should i zero pad upc_e?
@@ -235,7 +251,7 @@ module UpcTools
   # @see http://www.taltech.com/barcodesoftware/symbologies/upc
   # @see http://en.wikipedia.org/wiki/Universal_Product_Code#UPC-E
   # @see http://www.barcodeisland.com/upce.phtml#Conversion
-  # @param upc_a [String|Integer] 12 digit UPC-A to convert
+  # @param upc_a [String] 12 digit UPC-A to convert
   # @return [String] 8 digit UPC-E
   def self.convert_upca_to_upce(upc_a)
     #todo should i zero pad upc_a?
@@ -261,23 +277,6 @@ module UpcTools
     raise ArgumentError, "Must meet formatting requirements" unless upc_e
 
     "#{start}#{upc_e}#{chk}"
-  end
-
-
-  # Split a type2 UPC into the UPC itself and the price contained therein. If the value passed in is a type2 UPC, the return value will
-  # @param number [Integer|String] upc to check
-  # @return [Array(String,Float)] elements of array: type2 UPC string, Price. The UPC ends up with a 0 price if it is type2. The Price will be nil if the number passed in is not type2.
-  def self.type2_number_price(number)
-    if type2_upc?(number) && valid_type2_upc_check_digit?(number)
-      #looks like a type-2 and the price chk is valid
-      item_code, price = split_type2_upc(number)
-      price = (price.to_f / 100.0).round(2)
-
-      upc = item_price_to_type2(item_code, 0).rjust(14, '0')
-      [upc, price]
-    else
-      [number, nil]
-    end
   end
 
 end

@@ -1,5 +1,3 @@
-require 'upc_tools'
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
-RSpec.configure do |config|
-  # some (optional) config here
-end
+require 'upc_tools'
