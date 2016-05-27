@@ -1,6 +1,7 @@
 # UpcTools
 
 [![Build Status](https://travis-ci.org/Ibotta/ruby_upc_tools.svg?branch=master)](https://travis-ci.org/Ibotta/ruby_upc_tools)
+[![Gem Version](https://badge.fury.io/rb/upc_tools.svg)](https://badge.fury.io/rb/upc_tools)
 
 Utilities to generate, convert and validate UPCs.
 
