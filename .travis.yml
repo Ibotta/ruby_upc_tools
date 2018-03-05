@@ -1,12 +1,13 @@
 language: ruby
 cache: bundler
 rvm:
-  - "1.9.3"
-  - "2.1.9"
-  - "2.2.4"
-  - "2.3.1"
-  - "jruby-9.0.5.0"
-before_install:
+  - "2.3"
+  - "2.4"
+  - "2.5"
+  # - "jruby-9.1" #jruby can't run rake for some reason. skip it for now
+before_install:  # For jruby-head to work.
   - gem install bundler
+  - gem update bundler
+
 # uncomment this line if your project needs to run something other than `rake`:
 # script: bundle exec rspec spec
