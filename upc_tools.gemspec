@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{UPC validation and creation utilities}
   spec.description   = %q{create, validate, convert UPCs}
   spec.homepage      = "https://github.com/Ibotta/ruby_upc_tools"
-  spec.license       = "MIT"
+  spec.licenses      = ['Apache-2.0']
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"
